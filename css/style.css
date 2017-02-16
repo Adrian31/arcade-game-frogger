@@ -1,3 +1,62 @@
 body {
     text-align: center;
+    background: #6190E8; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #6190E8 , #A7BFE8); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #6190E8 , #A7BFE8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+
+h1 {
+	text-align: center;
+	font-weight: bold;
+	font-family: sans-serif;
+	color: #4B0082;
+}
+
+#game-over,
+#game-won {
+	display: none;
+	background: none;
+	opacity: 1;
+    color: white;
+    padding: 15em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+
+}
+
+a {
+  text-decoration: none;
+}
+
+.button {
+	display: block;
+	width: 100%;
+	margin: 0 auto;
+	line-height: 50px;
+	border-radius: 5px;
+	border: 1px;
+	color: white;
+	background-color: #blue;
+  	font-weight: bold;
+  	font-size: 150%;
+  opacity: 1;
+  margin-top: 100px;
+  margin-bottom: 80px;
+  webkit-text-fill-color: white; /* Will override color (regardless of order) */
+  font-size: 60px;
+   -webkit-text-stroke-width: 1px;
+   -webkit-text-stroke-color: black;
+}
+
+.mainheader{
+  font-size: 100px;
+}
+
+.winorlose {
+  font-size: 90px;
+  margin-top: 310px;
 }
