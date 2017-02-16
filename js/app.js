@@ -79,7 +79,7 @@ Player.prototype.update = function(dt) {
   this.enemyCollision();
 
 
-    if(player.score > 5 && player.y === 0) {
+    if(player.score >= 5 && player.y === 0) {
         $('#game-won').show();
         $('.won').click(function() {
             $('#game-won').hide();
@@ -97,10 +97,11 @@ Player.prototype.drawText = function() {
   ctx.fillText("Lives: " + this.lives, 400, 20);
 };
 
+
 Player.prototype.increaseScore = function() {
     if(hasReachedWater) {
         this.score++;
-        setTimeout(resetPlayer, 500);
+        setTimeout(resetPlayer);
         hasReachedWater = false;
     }
 };
@@ -135,44 +136,7 @@ var checkCollisions = function(targetArray) {
     }
 };
 
-/*Player.prototype.handleInput = function(key){
   //switchcase that gets the arrow direction desired and checks for wall collision
-    switch(key) {
-          case 'left':
-            if(this.x != -1){
-              this.x = this.x - 101;
-              //console.log("left");
-              //console.log(this.x);
-            };
-              break;
-          case 'down':
-              if(this.y != 375){
-                this.y = this.y + 83;
-                //console.log("down");
-                //console.log(this.y);
-              };
-              break;
-          case 'right':
-              if(this.x != 403){
-                this.x = this.x + 101;
-                //console.log("right");
-                //console.log(this.x);
-              };
-              break;
-          case 'up':
-            if(this.y != 43){
-              this.y = this.y - 83;
-              //console.log("up");
-              //console.log(this.y);
-            }else{
-              resetPlayer();
-              this.Player.score
-              console.log(this.player.score);
-            };
-              break;
-    };
-  }; */
-
   Player.prototype.handleInput = function(key){
     switch(key) {
         case 'left':
