@@ -1,10 +1,11 @@
-var rightEdge = 403;
-var bottomEdge = 375;
+var RIGHT_EDGE = 403;
+var BOTTOM_EDGE = 375;
 
-var tileWidth = 101;
-var tileHeight = 83;
+var TILE_WIDTH = 101;
+var TILE_HEIGHT = 83;
 
-var hasReachedWater = false;
+var HAS_REACHED_WATER = false;
+
 
 // Enemies our player must avoid
 var Enemy = function(x, y) {
@@ -29,10 +30,19 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
 
+    //Move enemy to the left side of the canvas once they've passed the edge of the right
     if (this.x < 510) {
         this.x += dt * this.speed;
     } else {
         this.x = -100;
+    }
+
+    //Collision detection
+    if (player.x < this.x + 50 &&
+        player.x + 50 > this.x &&
+        player.y < this.y + 40 &&
+        player.y + 40 > this.y) {
+        player.reset();
     }
 };
 
@@ -46,9 +56,9 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-var Player = function() {
-    this.x = 201;
-    this.y = 375;
+var Player = function(x,y) {
+    this.x = x;
+    this.y = y;
 
     this.score = 0;
     //Players score
@@ -72,8 +82,6 @@ Player.prototype.render = function() {
 Player.prototype.update = function(dt) {
     this.drawText();
     this.increaseScore();
-    this.enemyCollision();
-
 
     if (player.score >= 5 && player.y === 0) {
         $('#game-won').show();
@@ -96,76 +104,61 @@ Player.prototype.drawText = function() {
 
 
 Player.prototype.increaseScore = function() {
-    if (hasReachedWater) {
+    if (HAS_REACHED_WATER) {
         this.score++;
         setTimeout(resetPlayer);
-        hasReachedWater = false;
+        HAS_REACHED_WATER = false;
     }
 };
 
-Player.prototype.enemyCollision = function() {
-    var bug = checkCollisions(allEnemies);
-    //if collision detected, reduce a player life.
-    //Game over if all lives lost.
-    if (bug) {
-        if (this.lives !== 0) {
-            this.lives--;
-            resetPlayer();
-        } else {
-            $('#game-over').show();
-            $('.lost').click(function() {
-                $('#game-over').hide();
-                document.location.reload();
-            });
-            setTimeout(gameLoop, 1000 / 30);
-        }
-    }
-};
+Player.prototype.reset = function() {
+  this.x = 201;
+  this.y = 375;
+  this.lives = this.lives - 1;
 
-var checkCollisions = function(targetArray) {
-    for (var i = 0; i < targetArray.length; i++) {
-        if (player.x < targetArray[i].x + 50 &&
-            player.x + 50 > targetArray[i].x &&
-            player.y < targetArray[i].y + 40 &&
-            player.y + 40 > targetArray[i].y) {
-            return targetArray[i];
-        }
-    }
+  if (this.lives <= -1) {
+      $('#game-over').show();
+      $('.lost').click(function() {
+          $('#game-over').hide();
+          document.location.reload();
+      });
+      setTimeout(gameLoop, 1000 / 30);
+  }
 };
 
 //switchcase that gets the arrow direction desired and checks for wall collision
 Player.prototype.handleInput = function(key) {
     switch (key) {
         case 'left':
-            if (this.x - tileWidth < 0) {
+            if (this.x - TILE_WIDTH < 0) {
                 this.x = 0;
             } else {
-                this.x -= tileWidth;
+                this.x -= TILE_WIDTH;
             }
             break;
 
         case 'right':
-            if (this.x + tileWidth >= rightEdge) {
+            if (this.x + TILE_WIDTH >= RIGHT_EDGE) {
                 this.x = 404;
             } else {
-                this.x += tileWidth;
+                this.x += TILE_WIDTH;
             }
             break;
 
         case 'up':
-            if (this.y - tileHeight < 0) {
-                hasReachedWater = true;
+            if (this.y - TILE_HEIGHT < 0) {
+                HAS_REACHED_WATER = true;
                 this.y = 0;
             } else {
-                this.y -= tileHeight;
+                this.y -= TILE_HEIGHT;
             }
             break;
 
         case 'down':
-            if (this.y + tileHeight >= bottomEdge) {
+            if (this.y + TILE_HEIGHT >= BOTTOM_EDGE) {
                 this.y = 375;
             } else {
-                this.y += tileHeight;
+                this.y += TILE_HEIGHT;
             }
             break;
     }
@@ -178,7 +171,6 @@ Player.prototype.handleInput = function(key) {
 var allEnemies = [new Enemy(-100, 60, 500), new Enemy(-100, 140, 300), new Enemy(-100, 225, 225)];
 
 //not entirely sure if this is the best way of doing this.... But it had the desired effect
-
 //spawn 3 extra enemies
 var spawnEnemy = function() {
     for (var i = 0; i < 3; i++) {
@@ -188,7 +180,7 @@ var spawnEnemy = function() {
             enemyY = 140;
         } else if (i == 2) {
             enemyY = 60;
-        };
+        }
 
         var enemy = new Enemy(enemyX, enemyY);
         allEnemies.push(enemy);
@@ -196,7 +188,7 @@ var spawnEnemy = function() {
 };
 spawnEnemy();
 
-var player = new Player();
+var player = new Player(201, 375);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -210,3 +202,10 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+document.addEventListener("keydown", function(e) {
+// space and arrow keys
+if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+    e.preventDefault();
+}
+}, false);
