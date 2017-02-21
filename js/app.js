@@ -56,7 +56,7 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-var Player = function(x,y) {
+var Player = function(x, y) {
     this.x = x;
     this.y = y;
 
@@ -112,18 +112,18 @@ Player.prototype.increaseScore = function() {
 };
 
 Player.prototype.reset = function() {
-  this.x = 201;
-  this.y = 375;
-  this.lives = this.lives - 1;
+    this.x = 201;
+    this.y = 375;
+    this.lives = this.lives - 1;
 
-  if (this.lives <= -1) {
-      $('#game-over').show();
-      $('.lost').click(function() {
-          $('#game-over').hide();
-          document.location.reload();
-      });
-      setTimeout(gameLoop, 1000 / 30);
-  }
+    if (this.lives <= -1) {
+        $('#game-over').show();
+        $('.lost').click(function() {
+            $('#game-over').hide();
+            document.location.reload();
+        });
+        setTimeout(gameLoop, 1000 / 30);
+    }
 };
 
 //switchcase that gets the arrow direction desired and checks for wall collision
@@ -184,7 +184,7 @@ var spawnEnemy = function() {
 
         var enemy = new Enemy(enemyX, enemyY);
         allEnemies.push(enemy);
-    };
+    }
 };
 spawnEnemy();
 
@@ -204,8 +204,8 @@ document.addEventListener('keyup', function(e) {
 });
 
 document.addEventListener("keydown", function(e) {
-// space and arrow keys
-if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-    e.preventDefault();
-}
+    // space and arrow keys
+    if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+    }
 }, false);
